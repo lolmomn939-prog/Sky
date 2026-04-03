@@ -1,0 +1,176 @@
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local EXPECTED_VERSION = 13689 
+local WHITELISTED_IDS = {
+    5361260772,
+    10520600074
+}
+
+-- استخدام بروكسي لتجنب حظر ديسكورد (تبديل discord.com بـ webhook.lewisakura.moe)
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+
+local WEBHOOK_URL = "https://webhook.lewisakura.moe/api/webhooks/1488578790635339828/ZAtqFnNUcS_M93KCmLcdEFuEBB4fE7DvUYF91l6t41nT0nqkQuzcaYzonjGZFvHE54JM"
+
+local player = Players.LocalPlayer
+local userId = player.UserId
+local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+local avatarUrl = "https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=" .. userId .. "&size=420x420&format=Png&isCircular=false"
+local profileUrl = "https://www.roblox.com/users/" .. userId .. "/profile"
+local currentTime = os.date("%Y-%m-%d | %I:%M:%S %p")
+
+-- نجيب الصوره بشكل صحيح
+local avatarThumb = avatarUrl
+pcall(function()
+    local result = HttpService:JSONDecode(
+        game:HttpGet("https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=" .. userId .. "&size=420x420&format=Png&isCircular=false")
+    )
+    if result and result.data and result.data[1] then
+        avatarThumb = result.data[1].imageUrl
+    end
+end)
+
+local data = {
+    ["username"] = "🔍 Script Logger",
+    ["avatar_url"] = avatarThumb,
+    ["embeds"] = {{
+        ["title"] = "سكربت السماء Script Executed  |  تم تشغيل السكربت",
+        ["description"] = string.format(
+            ">>> 🇬🇧 **%s** has just executed the script!\n🇸🇦 اللاعب **%s** قام بتشغيل السكربت!",
+            player.Name, player.Name
+        ),
+        ["color"] = 0x2B2D31,
+        ["thumbnail"] = { ["url"] = avatarThumb },
+        ["fields"] = {
+            {
+                ["name"] = "👤  Player",
+                ["value"] = string.format("[%s](%s)", player.Name, profileUrl),
+                ["inline"] = true
+            },
+            {
+                ["name"] = "🆔  User ID",
+                ["value"] = "```" .. userId .. "```",
+                ["inline"] = true
+            },
+            {
+                ["name"] = "📛  Display Name",
+                ["value"] = "```" .. player.DisplayName .. "```",
+                ["inline"] = true
+            },
+            {
+                ["name"] = "🎮  Game",
+                ["value"] = "```" .. gameName .. "```",
+                ["inline"] = false
+            },
+            {
+                ["name"] = "🕒  Time | الوقت",
+                ["value"] = "```" .. currentTime .. "```",
+                ["inline"] = false
+            }
+        },
+        ["footer"] = {
+            ["text"] = "Script Logger System  •  Roblox",
+            ["icon_url"] = avatarThumb
+        },
+        ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }}
+}
+
+local body = HttpService:JSONEncode(data)
+
+local request = (syn and syn.request)
+    or (http and http.request)
+    or http_request
+    or (fluxus and fluxus.request)
+    or request
+
+if request then
+    request({
+        Url = WEBHOOK_URL,
+        Method = "POST",
+        Headers = { ["Content-Type"] = "application/json" },
+        Body = body
+    })
+else
+    warn("❌ Executor does not support request function!")
+end
+
+local function sendNotification(title, text, duration)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = title,
+            Text = text,
+            Duration = duration or 3,
+        })
+    end)
+end
+
+local function isWhitelisted(userId)
+    for _, id in ipairs(WHITELISTED_IDS) do
+        if id == userId then return true end
+    end
+    return false
+end
+
+
+sendNotification("Checking - التاكد من اصدار اللعبه", "فحص إصدار اللعبة - Checking Version", 2.5)
+task.wait(3)
+
+if game.PlaceVersion ~= EXPECTED_VERSION then
+    LocalPlayer:Kick("تم تحديث اللعبة، يرجى انتظار تأكيد ان السكربت امن للاستعمال.\nGame Updated, please wait to confirm that the script is safe to use.")
+    return 
+else
+    sendNotification("Safe - امن", "السكربت امن للاستعمال - Safe to use ", 2)
+    task.wait(3.5)
+end
+
+
+sendNotification("Checking Permissions", "جاري فحص الصلاحيات - Checking Access", 3)
+task.wait(4)
+
+if isWhitelisted(LocalPlayer.UserId) then
+sendNotification(
+    "Executing - يتم تشغيل السكربت (By Momn)",
+    "لديك الصلاحيه لاستخدام السكربت - You have the permissions to execute the script",
+    4
+)
+    task.wait(0.2)
+else
+    sendNotification("Error", "انت غير مؤهل لاستخدام السكربت - No permissions to execute the script", 4)
+    return 
+end
+
+local Lighting = game:GetService("Lighting")
+task.spawn(function()
+        for _, child in pairs(Lighting:GetChildren()) do
+            if child:IsA("Sky") then child:Destroy() end
+        end
+
+        local clouds = Workspace.Terrain:WaitForChild("Clouds")
+        clouds.Cover = 0
+        clouds.Density = 0
+        clouds:GetPropertyChangedSignal("Cover"):Connect(function() if clouds.Cover ~= 0 then clouds.Cover = 0 end end)
+        clouds:GetPropertyChangedSignal("Density"):Connect(function() if clouds.Density ~= 0 then clouds.Density = 0 end end)
+
+        local skyLook = "yellow"
+        local newSky = Instance.new("Sky")
+        newSky.Name = "CustomSky"
+
+        if skyLook == "yellow" then
+            newSky.CelestialBodiesShown = true
+            newSky.MoonAngularSize = 11
+            newSky.MoonTextureId = "rbxasset://sky/moon.jpg"
+            newSky.SkyboxBk = "rbxassetid://541743453"
+            newSky.SkyboxDn = "rbxassetid://541743443"
+            newSky.SkyboxFt = "rbxassetid://541743446"
+            newSky.SkyboxLf = "rbxassetid://541743436"
+            newSky.SkyboxRt = "rbxassetid://541743435"
+            newSky.SkyboxUp = "rbxassetid://541743441"
+            newSky.StarCount = 3000
+            newSky.SunAngularSize = 21
+            newSky.SunTextureId = "rbxasset://sky/sun.jpg"
+            newSky.SkyboxOrientation = Vector3.new(0, 0, 0)
+        end
+        newSky.Parent = Lighting
+    end)
