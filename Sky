@@ -5,7 +5,8 @@ local EXPECTED_VERSION = 13691
 local WHITELISTED_IDS = {
     5361260772,
     10520600074,
-    10770952043
+    10770952043,
+8637846917
 }
 
 -- استخدام بروكسي لتجنب حظر ديسكورد (تبديل discord.com بـ webhook.lewisakura.moe)
