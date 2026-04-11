@@ -117,16 +117,20 @@ local function isWhitelisted(userId)
     return false
 end
 
+if game.PlaceId == 7711635737 then
+    sendNotification("Checking - التاكد من اصدار اللعبه", "فحص إصدار اللعبة - Checking Version", 2.5)
+    task.wait(3)
 
-sendNotification("Checking - التاكد من اصدار اللعبه", "فحص إصدار اللعبة - Checking Version", 2.5)
-task.wait(3)
-
-if game.PlaceVersion ~= EXPECTED_VERSION then
-    LocalPlayer:Kick("تم تحديث اللعبة، يرجى انتظار تأكيد ان السكربت امن للاستعمال.\nGame Updated, please wait to confirm that the script is safe to use.")
-    return 
+    if game.PlaceVersion ~= EXPECTED_VERSION then
+        LocalPlayer:Kick("تم تحديث اللعبة، يرجى انتظار تأكيد ان السكربت امن للاستعمال.\nGame Updated, please wait to confirm that the script is safe to use.")
+        return 
+    else
+        sendNotification("Safe - امن", "السكربت امن للاستعمال - Safe to use ", 2)
+        task.wait(3.5)
+    end
 else
-    sendNotification("Safe - امن", "السكربت امن للاستعمال - Safe to use ", 2)
-    task.wait(3.5)
+    -- لو مو نفس الماب يتخطى الفحص
+    
 end
 
 
