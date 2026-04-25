@@ -13,7 +13,7 @@ local WHITELISTED_IDS = {
 5742200025
 }
 
--- استخدام بروكسي لتجنب حظر ديسكورد (تبديل discord.com بـ webhook.lewisakura.moe)
+ 
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 
@@ -26,7 +26,7 @@ local avatarUrl = "https://thumbnails.roproxy.com/v1/users/avatar-headshot?userI
 local profileUrl = "https://www.roblox.com/users/" .. userId .. "/profile"
 local currentTime = os.date("%Y-%m-%d | %I:%M:%S %p")
 
--- نجيب الصوره بشكل صحيح
+
 local avatarThumb = avatarUrl
 pcall(function()
     local result = HttpService:JSONDecode(
@@ -131,7 +131,7 @@ if game.PlaceId == 7711635737 then
         task.wait(3.5)
     end
 else
-    -- لو مو نفس الماب يتخطى الفحص
+    
     
 end
 
@@ -167,7 +167,7 @@ local Skies = {
     ["7"] = { Bk = "rbxassetid://15983968922", Dn = "rbxassetid://15983966825", Ft = "rbxassetid://15983965025", Lf = "rbxassetid://15983967420", Rt = "rbxassetid://15983966246", Up = "rbxassetid://15983964246", SunId = "rbxasset://sky/sun.jpg", SunSize = 21, MoonId = "rbxasset://sky/moon.jpg", MoonSize = 11, Stars = 3000 }
 }
 
--- [ 2 ] بناء الواجهة
+
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local ScrollingFrame = Instance.new("ScrollingFrame")
@@ -210,23 +210,23 @@ UIGridLayout.CellSize = UDim2.new(0, 130, 0, 80)
 UIGridLayout.CellPadding = UDim2.new(0, 10, 0, 10)
 UIGridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
--- [ 3 ] الدوال المحدثة
+
 local function cleanSkyOnly()
-    -- حذف الغيوم من الـ Terrain مباشرة
+    
     if Terrain then
         for _, cloud in ipairs(Terrain:GetChildren()) do
             if cloud:IsA("Clouds") then cloud:Destroy() end
         end
     end
     
-    -- حذف الـ Skybox فقط من Lighting
+    
     for _, obj in ipairs(Lighting:GetChildren()) do
         if obj:IsA("Sky") then obj:Destroy() end
     end
 end
 
 local function applySky(data)
-    cleanSkyOnly() -- ينظف السماء والغيوم فقط
+    cleanSkyOnly() 
     
     local newSky = Instance.new("Sky")
     newSky.SkyboxBk, newSky.SkyboxDn, newSky.SkyboxFt = data.Bk, data.Dn, data.Ft
@@ -238,7 +238,6 @@ local function applySky(data)
     ScreenGui.Enabled = false
 end
 
--- [ 4 ] إنشاء الأزرار
 local buttonOrder = {"1", "2", "3", "4", "5", "6", "7"}
 for _, name in ipairs(buttonOrder) do
     local btn = Instance.new("TextButton")
@@ -260,7 +259,6 @@ for _, name in ipairs(buttonOrder) do
     btn.MouseLeave:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(45, 45, 55) end)
 end
 
--- [ 5 ] الاختصار (K)
 UIS.InputBegan:Connect(function(input, processed)
     if not processed and input.KeyCode == Enum.KeyCode.K then
         ScreenGui.Enabled = not ScreenGui.Enabled
