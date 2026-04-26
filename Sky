@@ -155,117 +155,466 @@ local UIS = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local CoreGui = game:GetService("CoreGui")
 local Workspace = game:GetService("Workspace")
-local Terrain = Workspace:FindFirstChildOfClass("Terrain")
+local TweenService = game:GetService("TweenService")
 
+-- ══════════════════════════════════════════
+--              Sky Data
+-- ══════════════════════════════════════════
 local Skies = {
-    ["1"] = { Bk = "rbxassetid://1189339378", Dn = "rbxassetid://1189340601", Ft = "rbxassetid://1189339741", Lf = "rbxassetid://1189339550", Rt = "rbxassetid://1189339155", Up = "rbxassetid://1189340203", SunId = "rbxassetid://1084351190", SunSize = 12, MoonId = "rbxassetid://1075087760", MoonSize = 1.5, Stars = 500 },
-    ["2"] = { Bk = "rbxassetid://126146408999925", Dn = "rbxassetid://118112392224589", Ft = "rbxassetid://121253817183621", Lf = "rbxassetid://134105463289425", Rt = "rbxassetid://89099449712918", Up = "rbxassetid://138429250948648", SunId = "rbxassetid://1084351190", SunSize = 12, MoonId = "rbxassetid://1075087760", MoonSize = 1.5, Stars = 500 },
-    ["3"] = { Bk = "rbxassetid://570557514", Dn = "rbxassetid://570557775", Ft = "rbxassetid://570557559", Lf = "rbxassetid://570557620", Rt = "rbxassetid://570557672", Up = "rbxassetid://570557727", SunId = "rbxasset://sky/sun.jpg", SunSize = 21, MoonId = "rbxasset://sky/moon.jpg", MoonSize = 11, Stars = 3000 },
-    ["4"] = { Bk = "rbxassetid://12064107", Dn = "rbxassetid://12064152", Ft = "rbxassetid://12064121", Lf = "rbxassetid://12063984", Rt = "rbxassetid://12064115", Up = "rbxassetid://12064131", SunId = "rbxasset://sky/sun.jpg", SunSize = 21, MoonId = "rbxasset://sky/moon.jpg", MoonSize = 11, Stars = 0 },
-    ["5"] = { Bk = "rbxassetid://150939022", Dn = "rbxassetid://150939038", Ft = "rbxassetid://150939047", Lf = "rbxassetid://150939056", Rt = "rbxassetid://150939063", Up = "rbxassetid://150939082", SunId = "rbxasset://sky/sun.jpg", SunSize = 21, MoonId = "rbxasset://sky/moon.jpg", MoonSize = 11, Stars = 3000 },
-    ["6"] = { Bk = "rbxassetid://185544271", Dn = "rbxassetid://185544298", Ft = "rbxassetid://185544329", Lf = "rbxassetid://185544349", Rt = "rbxassetid://185544367", Up = "rbxassetid://185544404", SunId = "rbxasset://sky/sun.jpg", SunSize = 21, MoonId = "rbxasset://sky/moon.jpg", MoonSize = 11, Stars = 3000 },
-    ["7"] = { Bk = "rbxassetid://15983968922", Dn = "rbxassetid://15983966825", Ft = "rbxassetid://15983965025", Lf = "rbxassetid://15983967420", Rt = "rbxassetid://15983966246", Up = "rbxassetid://15983964246", SunId = "rbxasset://sky/sun.jpg", SunSize = 21, MoonId = "rbxasset://sky/moon.jpg", MoonSize = 11, Stars = 3000 },
-    ["8"] = { Bk = "rbxassetid://128600713462148", Dn = "rbxassetid://129205524771926", Ft = "rbxassetid://91295549823939", Lf = "rbxassetid://78049621027692", Rt = "rbxassetid://97339481871314", Up = "rbxassetid://85412515491070", SunId = "", SunSize = 11, MoonId = "", MoonSize = 11, Stars = 3000 },
-    ["9"] = { Bk = "rbxassetid://108929045660200", Dn = "rbxassetid://78646480540009", Ft = "rbxassetid://90546017435179", Lf = "rbxassetid://109838453114563", Rt = "rbxassetid://94190734796082", Up = "rbxassetid://126944775797063", SunId = "", SunSize = 11, MoonId = "", MoonSize = 11, Stars = 3000 },
-    ["10"] = { Bk = "rbxassetid://83030054115157", Dn = "rbxassetid://71350281697957", Ft = "rbxassetid://132490018747439", Lf = "rbxassetid://112621496884178", Rt = "rbxassetid://132328174186152", Up = "rbxassetid://75196096999005", SunId = "", SunSize = 11, MoonId = "", MoonSize = 11, Stars = 3000 },
-    ["11"] = { Bk = "rbxassetid://116261899350523", Dn = "rbxassetid://92257816837512", Ft = "rbxassetid://108326981730305", Lf = "rbxassetid://131834280163741", Rt = "rbxassetid://99525277797873", Up = "rbxassetid://125425274451894", SunId = "", SunSize = 11, MoonId = "", MoonSize = 11, Stars = 3000 },
-    ["12"] = { Bk = "rbxassetid://16553658937", Dn = "rbxassetid://16553660713", Ft = "rbxassetid://16553662144", Lf = "rbxassetid://16553664042", Rt = "rbxassetid://16553665766", Up = "rbxassetid://16553667750", SunId = "", SunSize = 11, MoonId = "", MoonSize = 11, Stars = 3000 }
+    ["1"]  = { Bk="rbxassetid://1189339378",  Dn="rbxassetid://1189340601",  Ft="rbxassetid://1189339741",  Lf="rbxassetid://1189339550",  Rt="rbxassetid://1189339155",  Up="rbxassetid://1189340203",  SunId="rbxassetid://1084351190", SunSize=12, MoonId="rbxassetid://1075087760", MoonSize=1.5, Stars=500 },
+    ["2"]  = { Bk="rbxassetid://126146408999925", Dn="rbxassetid://118112392224589", Ft="rbxassetid://121253817183621", Lf="rbxassetid://134105463289425", Rt="rbxassetid://89099449712918", Up="rbxassetid://138429250948648", SunId="rbxassetid://1084351190", SunSize=12, MoonId="rbxassetid://1075087760", MoonSize=1.5, Stars=500 },
+    ["3"]  = { Bk="rbxassetid://570557514",  Dn="rbxassetid://570557775",  Ft="rbxassetid://570557559",  Lf="rbxassetid://570557620",  Rt="rbxassetid://570557672",  Up="rbxassetid://570557727",  SunId="rbxasset://sky/sun.jpg", SunSize=21, MoonId="rbxasset://sky/moon.jpg", MoonSize=11, Stars=3000 },
+    ["4"]  = { Bk="rbxassetid://12064107",   Dn="rbxassetid://12064152",   Ft="rbxassetid://12064121",   Lf="rbxassetid://12063984",   Rt="rbxassetid://12064115",   Up="rbxassetid://12064131",   SunId="rbxasset://sky/sun.jpg", SunSize=21, MoonId="rbxasset://sky/moon.jpg", MoonSize=11, Stars=0 },
+    ["5"]  = { Bk="rbxassetid://150939022",  Dn="rbxassetid://150939038",  Ft="rbxassetid://150939047",  Lf="rbxassetid://150939056",  Rt="rbxassetid://150939063",  Up="rbxassetid://150939082",  SunId="rbxasset://sky/sun.jpg", SunSize=21, MoonId="rbxasset://sky/moon.jpg", MoonSize=11, Stars=3000 },
+    ["6"]  = { Bk="rbxassetid://185544271",  Dn="rbxassetid://185544298",  Ft="rbxassetid://185544329",  Lf="rbxassetid://185544349",  Rt="rbxassetid://185544367",  Up="rbxassetid://185544404",  SunId="rbxasset://sky/sun.jpg", SunSize=21, MoonId="rbxasset://sky/moon.jpg", MoonSize=11, Stars=3000 },
+    ["7"]  = { Bk="rbxassetid://15983968922", Dn="rbxassetid://15983966825", Ft="rbxassetid://15983965025", Lf="rbxassetid://15983967420", Rt="rbxassetid://15983966246", Up="rbxassetid://15983964246", SunId="rbxasset://sky/sun.jpg", SunSize=21, MoonId="rbxasset://sky/moon.jpg", MoonSize=11, Stars=3000 },
+    ["8"]  = { Bk="rbxassetid://128600713462148", Dn="rbxassetid://129205524771926", Ft="rbxassetid://91295549823939", Lf="rbxassetid://78049621027692", Rt="rbxassetid://97339481871314", Up="rbxassetid://85412515491070", SunId="", SunSize=11, MoonId="", MoonSize=11, Stars=3000 },
+    ["9"]  = { Bk="rbxassetid://108929045660200", Dn="rbxassetid://78646480540009", Ft="rbxassetid://90546017435179", Lf="rbxassetid://109838453114563", Rt="rbxassetid://94190734796082", Up="rbxassetid://126944775797063", SunId="", SunSize=11, MoonId="", MoonSize=11, Stars=3000 },
+    ["10"] = { Bk="rbxassetid://83030054115157", Dn="rbxassetid://71350281697957", Ft="rbxassetid://132490018747439", Lf="rbxassetid://112621496884178", Rt="rbxassetid://132328174186152", Up="rbxassetid://75196096999005", SunId="", SunSize=11, MoonId="", MoonSize=11, Stars=3000 },
+    ["11"] = { Bk="rbxassetid://116261899350523", Dn="rbxassetid://92257816837512", Ft="rbxassetid://108326981730305", Lf="rbxassetid://131834280163741", Rt="rbxassetid://99525277797873", Up="rbxassetid://125425274451894", SunId="", SunSize=11, MoonId="", MoonSize=11, Stars=3000 },
+    ["12"] = { Bk="rbxassetid://16553658937",  Dn="rbxassetid://16553660713",  Ft="rbxassetid://16553662144",  Lf="rbxassetid://16553664042",  Rt="rbxassetid://16553665766",  Up="rbxassetid://16553667750",  SunId="", SunSize=11, MoonId="", MoonSize=11, Stars=3000 },
 }
 
+-- ══════════════════════════════════════════
+--          Time Lock State
+-- ══════════════════════════════════════════
+local timeLockEnabled = false
+local lockedTime      = 12
+local timeLockConn    = nil
 
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local ScrollingFrame = Instance.new("ScrollingFrame")
-local UIGridLayout = Instance.new("UIGridLayout")
-local Title = Instance.new("TextLabel")
-
-ScreenGui.Name = "ModernSkyUI"
-ScreenGui.Parent = CoreGui
-ScreenGui.Enabled = true
-
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.Size = UDim2.new(0, 450, 0, 300) 
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-MainFrame.BorderSizePixel = 0
-
-local MainCorner = Instance.new("UICorner", MainFrame)
-MainCorner.CornerRadius = UDim.new(0, 12)
-
-Title.Name = "Title"
-Title.Parent = MainFrame
-Title.Text = "Sky Selector - اشكال السماء"
-Title.Size = UDim2.new(1, 0, 0, 40)
-Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.new(1, 1, 1)
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 18
-
-ScrollingFrame.Parent = MainFrame
-ScrollingFrame.Size = UDim2.new(1, -20, 1, -60)
-ScrollingFrame.Position = UDim2.new(0, 10, 0, 50)
-ScrollingFrame.BackgroundTransparency = 1
-ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 400)
-ScrollingFrame.ScrollBarThickness = 4
-
-UIGridLayout.Parent = ScrollingFrame
-UIGridLayout.CellSize = UDim2.new(0, 130, 0, 80)
-UIGridLayout.CellPadding = UDim2.new(0, 10, 0, 10)
-UIGridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-
-
-local function cleanSkyOnly()
-    
-    if Terrain then
-        for _, cloud in ipairs(Terrain:GetChildren()) do
-            if cloud:IsA("Clouds") then cloud:Destroy() end
+local function startTimeLock()
+    if timeLockConn then timeLockConn:Disconnect() end
+    Lighting.ClockTime = lockedTime
+    timeLockConn = Lighting:GetPropertyChangedSignal("ClockTime"):Connect(function()
+        if Lighting.ClockTime ~= lockedTime then
+            Lighting.ClockTime = lockedTime
+        end
+    end)
+    local terrain = Workspace:FindFirstChildOfClass("Terrain")
+    if terrain then
+        for _, child in ipairs(terrain:GetChildren()) do
+            if child:IsA("Clouds") then child.Enabled = false end
         end
     end
-    
-    
+    local atm = Lighting:FindFirstChildOfClass("Atmosphere")
+    if atm then
+        atm.Name    = "Atmosphere1"
+        atm.Density = 0.2
+    end
+end
+
+local function stopTimeLock()
+    if timeLockConn then
+        timeLockConn:Disconnect()
+        timeLockConn = nil
+    end
+end
+
+-- ══════════════════════════════════════════
+--              UI Build
+-- ══════════════════════════════════════════
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name           = "SkyUI_v3"
+ScreenGui.Parent         = CoreGui
+ScreenGui.Enabled        = true
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn   = false
+
+-- Main frame
+local Main = Instance.new("Frame", ScreenGui)
+Main.Name             = "Main"
+Main.Size             = UDim2.new(0, 440, 0, 490)
+Main.Position         = UDim2.new(0.5, 0, 0.5, 0)
+Main.AnchorPoint      = Vector2.new(0.5, 0.5)
+Main.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+Main.BorderSizePixel  = 0
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
+local MainStroke = Instance.new("UIStroke", Main)
+MainStroke.Color     = Color3.fromRGB(45, 45, 45)
+MainStroke.Thickness = 1
+
+-- Header
+local Header = Instance.new("Frame", Main)
+Header.Size             = UDim2.new(1, 0, 0, 44)
+Header.Position         = UDim2.new(0, 0, 0, 0)
+Header.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+Header.BorderSizePixel  = 0
+Instance.new("UICorner", Header).CornerRadius = UDim.new(0, 12)
+-- fill bottom corners of header
+local HFill = Instance.new("Frame", Header)
+HFill.Size             = UDim2.new(1, 0, 0, 12)
+HFill.Position         = UDim2.new(0, 0, 1, -12)
+HFill.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+HFill.BorderSizePixel  = 0
+
+local TitleLabel = Instance.new("TextLabel", Header)
+TitleLabel.Size            = UDim2.new(1, -110, 1, 0)
+TitleLabel.Position        = UDim2.new(0, 14, 0, 0)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text            = ""
+TitleLabel.Font            = Enum.Font.GothamBold
+TitleLabel.TextSize        = 15
+TitleLabel.TextColor3      = Color3.fromRGB(210, 210, 210)
+TitleLabel.TextXAlignment  = Enum.TextXAlignment.Left
+
+local HintLabel = Instance.new("TextLabel", Header)
+HintLabel.Size             = UDim2.new(0, 74, 0, 22)
+HintLabel.Position         = UDim2.new(1, -84, 0.5, 0)
+HintLabel.AnchorPoint      = Vector2.new(0, 0.5)
+HintLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+HintLabel.BorderSizePixel  = 0
+HintLabel.Text             = "[ K ] لاخفاء القائمه"
+HintLabel.Font             = Enum.Font.Code
+HintLabel.TextSize         = 11
+HintLabel.TextColor3       = Color3.fromRGB(110, 110, 110)
+Instance.new("UICorner", HintLabel).CornerRadius = UDim.new(0, 6)
+
+-- Divider 1
+local Div1 = Instance.new("Frame", Main)
+Div1.Size             = UDim2.new(1, 0, 0, 1)
+Div1.Position         = UDim2.new(0, 0, 0, 44)
+Div1.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Div1.BorderSizePixel  = 0
+
+-- Sky ScrollingFrame
+local Scroll = Instance.new("ScrollingFrame", Main)
+Scroll.Size              = UDim2.new(1, -20, 0, 238)
+Scroll.Position          = UDim2.new(0, 10, 0, 52)
+Scroll.BackgroundTransparency = 1
+Scroll.BorderSizePixel   = 0
+Scroll.ScrollBarThickness = 3
+Scroll.ScrollBarImageColor3 = Color3.fromRGB(70, 70, 70)
+Scroll.CanvasSize        = UDim2.new(0, 0, 0, 0)
+Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+local Grid = Instance.new("UIGridLayout", Scroll)
+Grid.CellSize            = UDim2.new(0, 120, 0, 56)
+Grid.CellPadding         = UDim2.new(0, 8, 0, 8)
+Grid.HorizontalAlignment = Enum.HorizontalAlignment.Center
+Grid.SortOrder           = Enum.SortOrder.LayoutOrder
+
+local GridPad = Instance.new("UIPadding", Scroll)
+GridPad.PaddingTop    = UDim.new(0, 6)
+GridPad.PaddingBottom = UDim.new(0, 6)
+
+-- Sky buttons
+local selectedBtn = nil
+
+local function cleanSkyOnly()
+    local terrain = Workspace:FindFirstChildOfClass("Terrain")
+    if terrain then
+        for _, c in ipairs(terrain:GetChildren()) do
+            if c:IsA("Clouds") then c:Destroy() end
+        end
+    end
     for _, obj in ipairs(Lighting:GetChildren()) do
         if obj:IsA("Sky") then obj:Destroy() end
     end
 end
 
-local function applySky(data)
-    cleanSkyOnly() 
-    
-    local newSky = Instance.new("Sky")
-    newSky.SkyboxBk, newSky.SkyboxDn, newSky.SkyboxFt = data.Bk, data.Dn, data.Ft
-    newSky.SkyboxLf, newSky.SkyboxRt, newSky.SkyboxUp = data.Lf, data.Rt, data.Up
-    newSky.SunTextureId, newSky.SunAngularSize = data.SunId, data.SunSize
-    newSky.MoonTextureId, newSky.MoonAngularSize = data.MoonId, data.MoonSize
-    newSky.StarCount = data.Stars
-    newSky.Parent = Lighting
-    ScreenGui.Enabled = false
+local function applySky(data, btn)
+    cleanSkyOnly()
+    local sky = Instance.new("Sky")
+    sky.SkyboxBk, sky.SkyboxDn, sky.SkyboxFt = data.Bk, data.Dn, data.Ft
+    sky.SkyboxLf, sky.SkyboxRt, sky.SkyboxUp = data.Lf, data.Rt, data.Up
+    sky.SunTextureId, sky.SunAngularSize      = data.SunId, data.SunSize
+    sky.MoonTextureId, sky.MoonAngularSize    = data.MoonId, data.MoonSize
+    sky.StarCount = data.Stars
+    sky.Parent    = Lighting
+
+    if selectedBtn and selectedBtn ~= btn then
+        TweenService:Create(selectedBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(28, 28, 28)}):Play()
+        for _, c in ipairs(selectedBtn:GetChildren()) do
+            if c:IsA("TextLabel") then
+                c.TextColor3 = Color3.fromRGB(170, 170, 170)
+            end
+        end
+    end
+    TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(52, 52, 52)}):Play()
+    for _, c in ipairs(btn:GetChildren()) do
+        if c:IsA("TextLabel") then
+            c.TextColor3 = Color3.fromRGB(255, 255, 255)
+        end
+    end
+    selectedBtn = btn
+    -- UI يبقى مفتوح بعد الاختيار
 end
 
-local buttonOrder = {"1", "2", "3", "4", "5", "6", "7","8","9","10","11","12"}
-for _, name in ipairs(buttonOrder) do
-    local btn = Instance.new("TextButton")
-    btn.Text = "Sky " .. name
-    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
-    btn.TextColor3 = Color3.new(1, 1, 1)
-    btn.Font = Enum.Font.GothamBold
-    btn.TextSize = 16
-    btn.Parent = ScrollingFrame
+local buttonOrder = {"1","2","3","4","5","6","7","8","9","10","11","12"}
+for i, name in ipairs(buttonOrder) do
+    local btn = Instance.new("TextButton", Scroll)
+    btn.LayoutOrder      = i
+    btn.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+    btn.BorderSizePixel  = 0
+    btn.AutoButtonColor  = false
+    btn.Text             = ""
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
+    local stroke = Instance.new("UIStroke", btn)
+    stroke.Color     = Color3.fromRGB(45, 45, 45)
+    stroke.Thickness = 1
 
-    local btnCorner = Instance.new("UICorner", btn)
-    btnCorner.CornerRadius = UDim.new(0, 8)
+    local lbl = Instance.new("TextLabel", btn)
+    lbl.Size             = UDim2.new(1, 0, 1, 0)
+    lbl.BackgroundTransparency = 1
+    lbl.Text             = name
+    lbl.Font             = Enum.Font.GothamBold
+    lbl.TextSize         = 15
+    lbl.TextColor3       = Color3.fromRGB(170, 170, 170)
 
-    btn.MouseButton1Click:Connect(function()
-        applySky(Skies[name])
+    btn.MouseEnter:Connect(function()
+        if btn ~= selectedBtn then
+            TweenService:Create(btn, TweenInfo.new(0.12), {BackgroundColor3 = Color3.fromRGB(36, 36, 36)}):Play()
+        end
     end)
-    
-    btn.MouseEnter:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(60, 60, 80) end)
-    btn.MouseLeave:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(45, 45, 55) end)
+    btn.MouseLeave:Connect(function()
+        if btn ~= selectedBtn then
+            TweenService:Create(btn, TweenInfo.new(0.12), {BackgroundColor3 = Color3.fromRGB(28, 28, 28)}):Play()
+        end
+    end)
+    btn.MouseButton1Click:Connect(function()
+        applySky(Skies[name], btn)
+    end)
 end
 
+-- Divider 2
+local Div2 = Instance.new("Frame", Main)
+Div2.Size             = UDim2.new(1, 0, 0, 1)
+Div2.Position         = UDim2.new(0, 0, 0, 298)
+Div2.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Div2.BorderSizePixel  = 0
+
+-- Time Lock Section
+local TLS = Instance.new("Frame", Main)
+TLS.Size             = UDim2.new(1, -20, 0, 172)
+TLS.Position         = UDim2.new(0, 10, 0, 308)
+TLS.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+TLS.BorderSizePixel  = 0
+Instance.new("UICorner", TLS).CornerRadius = UDim.new(0, 10)
+local TLSStroke = Instance.new("UIStroke", TLS)
+TLSStroke.Color     = Color3.fromRGB(40, 40, 40)
+TLSStroke.Thickness = 1
+
+-- TLS header row
+local TLHeader = Instance.new("Frame", TLS)
+TLHeader.Size              = UDim2.new(1, 0, 0, 44)
+TLHeader.BackgroundTransparency = 1
+TLHeader.BorderSizePixel   = 0
+
+local TLTitle = Instance.new("TextLabel", TLHeader)
+TLTitle.Size             = UDim2.new(1, -70, 1, 0)
+TLTitle.Position         = UDim2.new(0, 14, 0, 0)
+TLTitle.BackgroundTransparency = 1
+TLTitle.Text             = "تثبيت الوقت"
+TLTitle.Font             = Enum.Font.GothamBold
+TLTitle.TextSize         = 14
+TLTitle.TextColor3       = Color3.fromRGB(200, 200, 200)
+TLTitle.TextXAlignment   = Enum.TextXAlignment.Left
+
+-- Toggle pill
+local TogglePill = Instance.new("TextButton", TLHeader)
+TogglePill.Size            = UDim2.new(0, 46, 0, 24)
+TogglePill.Position        = UDim2.new(1, -56, 0.5, 0)
+TogglePill.AnchorPoint     = Vector2.new(0, 0.5)
+TogglePill.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TogglePill.BorderSizePixel  = 0
+TogglePill.Text             = ""
+TogglePill.AutoButtonColor  = false
+Instance.new("UICorner", TogglePill).CornerRadius = UDim.new(1, 0)
+local PillStroke = Instance.new("UIStroke", TogglePill)
+PillStroke.Color     = Color3.fromRGB(60, 60, 60)
+PillStroke.Thickness = 1
+
+local PillKnob = Instance.new("Frame", TogglePill)
+PillKnob.Size            = UDim2.new(0, 18, 0, 18)
+PillKnob.Position        = UDim2.new(0, 3, 0.5, 0)
+PillKnob.AnchorPoint     = Vector2.new(0, 0.5)
+PillKnob.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+PillKnob.BorderSizePixel  = 0
+Instance.new("UICorner", PillKnob).CornerRadius = UDim.new(1, 0)
+
+-- Sub label
+local TLSub = Instance.new("TextLabel", TLS)
+TLSub.Size             = UDim2.new(1, -19, 0, 19)
+TLSub.Position         = UDim2.new(0, 14, 0, 44)
+TLSub.BackgroundTransparency = 1
+TLSub.Text             = "تثبيت الوقت على ساعه معينه"
+TLSub.Font             = Enum.Font.Gotham
+TLSub.TextSize         = 18
+TLSub.TextColor3       = Color3.fromRGB(85, 85, 85)
+TLSub.TextXAlignment   = Enum.TextXAlignment.Left
+
+-- Inner divider
+local TLDiv = Instance.new("Frame", TLS)
+TLDiv.Size             = UDim2.new(1, -28, 0, 1)
+TLDiv.Position         = UDim2.new(0, 14, 0, 60)
+TLDiv.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TLDiv.BorderSizePixel  = 0
+
+-- Slider row
+local SliderRow = Instance.new("Frame", TLS)
+SliderRow.Size             = UDim2.new(1, -28, 0, 78)
+SliderRow.Position         = UDim2.new(0, 14, 0, 68)
+SliderRow.BackgroundTransparency = 1
+SliderRow.BorderSizePixel  = 0
+
+local SliderLabel = Instance.new("TextLabel", SliderRow)
+SliderLabel.Size           = UDim2.new(0.5, 0, 0, 18)
+SliderLabel.Position       = UDim2.new(0, 0, 0, 0)
+SliderLabel.BackgroundTransparency = 1
+SliderLabel.Text           = "الساعة: 12:00"
+SliderLabel.Font           = Enum.Font.Gotham
+SliderLabel.TextSize       = 12
+SliderLabel.TextColor3     = Color3.fromRGB(130, 130, 130)
+SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local SliderBadge = Instance.new("TextLabel", SliderRow)
+SliderBadge.Size             = UDim2.new(0, 58, 0, 22)
+SliderBadge.Position         = UDim2.new(1, -58, 0, -2)
+SliderBadge.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+SliderBadge.BorderSizePixel  = 0
+SliderBadge.Text             = "12:00"
+SliderBadge.Font             = Enum.Font.GothamBold
+SliderBadge.TextSize         = 13
+SliderBadge.TextColor3       = Color3.fromRGB(195, 195, 195)
+Instance.new("UICorner", SliderBadge).CornerRadius = UDim.new(0, 6)
+
+local Track = Instance.new("Frame", SliderRow)
+Track.Size             = UDim2.new(1, 0, 0, 5)
+Track.Position         = UDim2.new(0, 0, 0, 28)
+Track.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+Track.BorderSizePixel  = 0
+Instance.new("UICorner", Track).CornerRadius = UDim.new(1, 0)
+local TrackStroke = Instance.new("UIStroke", Track)
+TrackStroke.Color     = Color3.fromRGB(50, 50, 50)
+TrackStroke.Thickness = 1
+
+local TrackFill = Instance.new("Frame", Track)
+TrackFill.Size             = UDim2.new(0.5, 0, 1, 0)
+TrackFill.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
+TrackFill.BorderSizePixel  = 0
+Instance.new("UICorner", TrackFill).CornerRadius = UDim.new(1, 0)
+
+local Thumb = Instance.new("TextButton", Track)
+Thumb.Size              = UDim2.new(0, 16, 0, 16)
+Thumb.Position          = UDim2.new(0.5, -8, 0.5, 0)
+Thumb.AnchorPoint       = Vector2.new(0, 0.5)
+Thumb.BackgroundColor3  = Color3.fromRGB(215, 215, 215)
+Thumb.BorderSizePixel   = 0
+Thumb.Text              = ""
+Thumb.AutoButtonColor   = false
+Instance.new("UICorner", Thumb).CornerRadius = UDim.new(1, 0)
+
+-- Tick labels
+local TickRow = Instance.new("Frame", SliderRow)
+TickRow.Size              = UDim2.new(1, 0, 0, 14)
+TickRow.Position          = UDim2.new(0, 0, 0, 40)
+TickRow.BackgroundTransparency = 1
+TickRow.BorderSizePixel   = 0
+
+local tickLabels    = {"0", "6", "12", "18", "24"}
+local tickPositions = {0, 0.25, 0.5, 0.75, 1}
+for ti, tv in ipairs(tickLabels) do
+    local t = Instance.new("TextLabel", TickRow)
+    t.Size              = UDim2.new(0, 20, 1, 0)
+    t.Position          = UDim2.new(tickPositions[ti], -10, 0, 0)
+    t.BackgroundTransparency = 1
+    t.Text              = tv
+    t.Font              = Enum.Font.Code
+    t.TextSize          = 10
+    t.TextColor3        = Color3.fromRGB(65, 65, 65)
+end
+
+-- Status dot (نقطة صغيرة فقط بدون نص)
+local StatusDot = Instance.new("Frame", TLS)
+StatusDot.Size             = UDim2.new(0, 7, 0, 7)
+StatusDot.Position         = UDim2.new(0, 14, 1, -14)
+StatusDot.AnchorPoint      = Vector2.new(0, 0.5)
+StatusDot.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+StatusDot.BorderSizePixel  = 0
+Instance.new("UICorner", StatusDot).CornerRadius = UDim.new(1, 0)
+
+-- ══════════════════════════════════════════
+--         Slider Logic
+-- ══════════════════════════════════════════
+local function formatTime(t)
+    local h = math.floor(t)
+    local m = math.floor((t - h) * 60)
+    return string.format("%02d:%02d", h, m)
+end
+
+local function updateSliderVisuals(ratio)
+    local t = ratio * 24
+    lockedTime = t
+    TrackFill.Size = UDim2.new(ratio, 0, 1, 0)
+    Thumb.Position = UDim2.new(ratio, -8, 0.5, 0)
+    local ts = formatTime(t)
+    SliderLabel.Text = "الساعة: " .. ts
+    SliderBadge.Text = ts
+    if timeLockEnabled then
+        Lighting.ClockTime = lockedTime
+    end
+end
+
+local dragging = false
+Thumb.InputBegan:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+    end
+end)
+UIS.InputEnded:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+UIS.InputChanged:Connect(function(inp)
+    if dragging and (inp.UserInputType == Enum.UserInputType.MouseMovement or inp.UserInputType == Enum.UserInputType.Touch) then
+        local ratio = math.clamp((inp.Position.X - Track.AbsolutePosition.X) / Track.AbsoluteSize.X, 0, 1)
+        updateSliderVisuals(ratio)
+    end
+end)
+Track.InputBegan:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+        local ratio = math.clamp((inp.Position.X - Track.AbsolutePosition.X) / Track.AbsoluteSize.X, 0, 1)
+        updateSliderVisuals(ratio)
+    end
+end)
+
+-- ══════════════════════════════════════════
+--         Toggle Logic
+-- ══════════════════════════════════════════
+local function setToggle(state)
+    timeLockEnabled = state
+    if state then
+        TweenService:Create(TogglePill, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(68, 68, 68)}):Play()
+        TweenService:Create(PillKnob,  TweenInfo.new(0.2), {
+            Position         = UDim2.new(1, -21, 0.5, 0),
+            BackgroundColor3 = Color3.fromRGB(225, 225, 225),
+        }):Play()
+        TweenService:Create(StatusDot, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(150, 215, 120)}):Play()
+        startTimeLock()
+    else
+        TweenService:Create(TogglePill, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
+        TweenService:Create(PillKnob,  TweenInfo.new(0.2), {
+            Position         = UDim2.new(0, 3, 0.5, 0),
+            BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+        }):Play()
+        TweenService:Create(StatusDot, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(55, 55, 55)}):Play()
+        stopTimeLock()
+    end
+end
+
+TogglePill.MouseButton1Click:Connect(function()
+    setToggle(not timeLockEnabled)
+end)
+
+-- ══════════════════════════════════════════
+--         K key Toggle GUI
+-- ══════════════════════════════════════════
 UIS.InputBegan:Connect(function(input, processed)
     if not processed and input.KeyCode == Enum.KeyCode.K then
         ScreenGui.Enabled = not ScreenGui.Enabled
     end
 end)
+
+-- init
+updateSliderVisuals(0.5)
