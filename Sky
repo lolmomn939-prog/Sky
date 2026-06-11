@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local EXPECTED_VERSION = 13698
 local WHITELISTED_IDS = {
+5595526663,
     5361260772,
     10520600074,
     10770952043,
