@@ -115,7 +115,7 @@ local function isWhitelisted(userId)
 end
 
 if game.PlaceId == 7711635737 then
-    sendNotification("Checking - التاكد من اصدار اللعبه", "فحص إصدار اللعبة - Checking Version", 2.5)
+    sendNotification("Checking - التاكد من اصدار اللعبه", "فحص إصدار اللعبة - Checking Version", 3.5)
     task.wait(3)
 
     if game.PlaceVersion ~= EXPECTED_VERSION then
