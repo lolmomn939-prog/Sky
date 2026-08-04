@@ -1,7 +1,7 @@
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local EXPECTED_VERSION = 13705
+local EXPECTED_VERSION = 13706
 local WHITELISTED_IDS = {
 10520600074,
 2900978092,
