@@ -8,7 +8,8 @@ local WHITELISTED_IDS = {
 
 }
 
- 
+ زين 
+return "sb"
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 
